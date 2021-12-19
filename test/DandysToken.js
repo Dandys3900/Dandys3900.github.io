@@ -7,12 +7,57 @@
  const DandysToken = artifacts.require("DandysToken");
 
  contract("DandysToken", function(accounts) {
-     it("Setting the total number of supplied tokens upon deployment", function() {
+    var tokenInstance;
+
+    it("Initializing contarct with required values", function() {
+        return DandysToken.deployed().then(function(instance) {
+            tokenInstance = instance;
+            return tokenInstance.name();
+        }).then(function(name) {
+            assert.equal(name, "Dandys Token", "Token has correct name, OK!");
+            return tokenInstance.symbol();
+        }).then(function(symbol) {
+            assert.equal(symbol, "DDT", "Token has correct symbol, OK!");
+            return tokenInstance.standard();
+        }).then(function(standard) {
+            assert.equal(standard, "DDT Token v1.0", "Token has correct standard, OK!");
+        });
+    });
+
+     it("Setting the initial supply", function() {
         return DandysToken.deployed().then(function(instance) {
             tokenInstance = instance;
             return tokenInstance.totalSupply();
         }).then(function(totalSupply) {
             assert.equal(totalSupply.toNumber(), 1000000, "Numbers are same, OK!"); //Compare first and second argument and if they are same, print output
+            return tokenInstance.balanceOf(accounts[0]); //the first account in our Ganache chain, accounts array is manages by Ganache itself, when not specified constroctur sets everything to the first account
+        }).then(function(accountBalance) {
+            assert.equal(accountBalance.toNumber(), 1000000, "Initial supply and account of 0# user are same, OK!");
+        });
+     });
+
+     it("Transfering tokens", function() {
+        return DandysToken.deployed().then(function(instance) {
+            tokenInstance = instance;
+            return tokenInstance.transfer.call(accounts[1], 1000001); //Must fail, because max. amount is 1000000, using call() to not trigger the transaction only send its value
+        }).then(assert.fail).catch(function(error) {
+            assert(error.message.indexOf("revert") >= 0, "Error message must contain string 'revert'"); //Output in case there is "revert" string in message
+            return tokenInstance.transfer.call(accounts[1], 250000, { from: accounts[0] });
+        }).then(function(success) {
+            assert.equal(success, true, "Output from Transfer() function is true");
+            return tokenInstance.transfer(accounts[1], 250000, { from: accounts[0]}); //From acount 0 to account 1 send 250000 tokens, stuff in {} is called meta data
+        }).then(function(receipt) {
+            assert.equal(receipt.logs.length, 1, "Event was triggered!");
+            assert.equal(receipt.logs[0].event, "Transfer", "It is Transfer event");
+            assert.equal(receipt.logs[0].args._from, accounts[0], "From where are the tokens transferred");
+            assert.equal(receipt.logs[0].args._to, accounts[1], "To who are the tokens transferred");
+            assert.equal(receipt.logs[0].args._value, 250000, "Transferred amount");
+            return tokenInstance.balanceOf(accounts[1]);
+        }).then(function(accountbalance) {
+            assert.equal(accountbalance.toNumber(), 250000, "Tokens were successfully transferred!");
+            return tokenInstance.balanceOf(accounts[0]);
+        }).then(function(accountbalance) {
+            assert.equal(accountbalance.toNumber(), 750000, "Tokens were successfully deleted from sender!"); //Account 0 got 1000000 and send 250000, so he must still have 750000 tokens
         });
      });
  })

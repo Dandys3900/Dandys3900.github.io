@@ -3,5 +3,5 @@
 const DandysToken = artifacts.require("DandysToken");
 
 module.exports = function (deployer) {
-  deployer.deploy(DandysToken);
+  deployer.deploy(DandysToken, 1000000); //set value for constructor
 };
