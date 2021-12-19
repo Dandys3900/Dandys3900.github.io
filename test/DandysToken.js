@@ -39,7 +39,7 @@
      it("Transfering tokens", function() {
         return DandysToken.deployed().then(function(instance) {
             tokenInstance = instance;
-            return tokenInstance.transfer.call(accounts[1], 1000001); //Must fail, because max. amount is 1000000, using call() to not trigger the transaction only send its value
+            return tokenInstance.transfer.call(accounts[1], 1000001); //Must fail, because max. amount is 1000000, using call() to not trigger the transaction only send its value, only test
         }).then(assert.fail).catch(function(error) {
             assert(error.message.indexOf("revert") >= 0, "Error message must contain string 'revert'"); //Output in case there is "revert" string in message
             return tokenInstance.transfer.call(accounts[1], 250000, { from: accounts[0] });
@@ -58,6 +58,22 @@
             return tokenInstance.balanceOf(accounts[0]);
         }).then(function(accountbalance) {
             assert.equal(accountbalance.toNumber(), 750000, "Tokens were successfully deleted from sender!"); //Account 0 got 1000000 and send 250000, so he must still have 750000 tokens
+        });
+     });
+
+     it("Approves tokens for delegated transfers", function() {
+        return DandysToken.deployed().then(function(instance) {
+            tokenInstance = instance;
+            return tokenInstance.approve.call(accounts[1], 100);
+        }).then(function(success) {
+            assert.equal(success, true, "Approve() function returned true");
+            return tokenInstance.approve(accounts[1], 100); //not using call, triggering blockchain transaction, to check for logs from Approve event
+        }).then(function(receipt) {
+            assert.equal(receipt.logs.length, 1, "Event was triggered!");
+            assert.equal(receipt.logs[0].event, "Approval", "It is Approve event");
+            assert.equal(receipt.logs[0].args._owner, accounts[0], "Tokens spedning is authorised by this account");
+            assert.equal(receipt.logs[0].args._spender, accounts[1], "This account is allowed to spend owners money");
+            assert.equal(receipt.logs[0].args._value, 100, "Approved amount to be spended");
         });
      });
  })

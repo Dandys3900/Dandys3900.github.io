@@ -20,11 +20,19 @@ contract DandysToken {
         uint256 _value
     );
 
+    event Approval(
+        address indexed _owner,
+        address indexed _spender,
+        uint256 _value
+    );
+
     mapping(address => uint256) public balanceOf; //key(account) - value(account balance), name of variable is because of ERC20 standard
+    //allowance
+    mapping(address => mapping(address => uint256)) public allowance;
 
     //Construct
-    constructor(uint256 _initSupply) public { //_ - convension, not compulsory
-        balanceOf[msg.sender] = _initSupply; //msg is global variable in Solidity, msg.sender is the address of account
+    constructor(uint256 _initSupply) public { //_ - convencion, not compulsory
+        balanceOf[msg.sender] = _initSupply; //msg is global variable in Solidity, msg.sender is the address of account, adress of who called this function
         totalSupply = _initSupply; //Number of all tokens ever made
     }
     //Set the number of tokens
@@ -40,6 +48,15 @@ contract DandysToken {
         //Transfer event
         emit Transfer(msg.sender, _to, _value);
 
+        return true;
+    }
+
+    //Delegated transfer - action performed by the name of one account, but which is paid by the second account, not used by our crypto, but needed by ERC20, something like approve bank manager to invest your money
+    //approve event
+    function approve(address _spender, uint256 _value) public returns (bool success) {
+        //Aprove event
+        emit Approval(msg.sender, _spender, _value);
+        
         return true;
     }
 }
