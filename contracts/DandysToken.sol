@@ -1,5 +1,7 @@
-/* It will implement ERC20 standard methods
-In charge of behaviour of my crypto */
+// SPDX-License-Identifier: MIT
+
+// It will implement ERC20 standard methods
+//In charge of behaviour of my crypto
 
 pragma solidity >=0.4.22 <0.9.0;
 
@@ -31,7 +33,7 @@ contract DandysToken {
     mapping(address => mapping(address => uint256)) public allowance;
 
     //Construct
-    constructor(uint256 _initSupply) public { //_ - convencion, not compulsory
+    constructor(uint256 _initSupply) { //_ - convencion, not compulsory
         balanceOf[msg.sender] = _initSupply; //msg is global variable in Solidity, msg.sender is the address of account, adress of who called this function
         totalSupply = _initSupply; //Number of all tokens ever made
     }
