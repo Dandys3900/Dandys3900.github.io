@@ -70,10 +70,16 @@ contract DandysToken {
 
         //Make sure we dont transfer more tokens than we have approved
         require(allowance[_from][msg.sender] >= _value);
+        
+        balanceOf[_from] -= _value;
+        balanceOf[_to] += _value;
+
+        //Update the allowance
+        allowance[_from][msg.sender] -= _value;
 
         //Transfer events
         emit Transfer(_from, _to, _value);
-        
+
         return true;
     }
 }

@@ -114,7 +114,12 @@
             return tokenInstance.balanceOf(fromAccount);
          }).then(function(accountbalance) {
             assert.equal(accountbalance.toNumber(), 90, "Right amount of tokens were spend from the account"); //Initially there were 100 tokens and we spend 10 of them so there should be 90 left
-            return tokenInstance.balanceOf(fromAccount);
+            return tokenInstance.balanceOf(toAccount);
+         }).then(function(accountbalance) {
+             assert.equal(accountbalance.toNumber(), 10, "Tokens were added to receiver account");
+             return tokenInstance.allowance(fromAccount, spendingAccount);
+         }).then(function(allowance) {
+            assert.equal(allowance.toNumber(), 0, "Checking if the allowance is set correctly"); //We were allowed to spend 10 tokens and we already did, so there should be 0 tokens left for spending
          });
      });
  })
