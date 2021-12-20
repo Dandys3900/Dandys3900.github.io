@@ -45,7 +45,7 @@
             return tokenInstance.transfer.call(accounts[1], 250000, { from: accounts[0] });
         }).then(function(success) {
             assert.equal(success, true, "Output from Transfer() function is true");
-            return tokenInstance.transfer(accounts[1], 250000, { from: accounts[0]}); //From acount 0 to account 1 send 250000 tokens, stuff in {} is called meta data
+            return tokenInstance.transfer(accounts[1], 250000, { from: accounts[0] }); //From acount 0 to account 1 send 250000 tokens, stuff in {} is called meta data
         }).then(function(receipt) {
             assert.equal(receipt.logs.length, 1, "Event was triggered!");
             assert.equal(receipt.logs[0].event, "Transfer", "It is Transfer event");
@@ -67,13 +67,54 @@
             return tokenInstance.approve.call(accounts[1], 100);
         }).then(function(success) {
             assert.equal(success, true, "Approve() function returned true");
-            return tokenInstance.approve(accounts[1], 100); //not using call, triggering blockchain transaction, to check for logs from Approve event
+            return tokenInstance.approve(accounts[1], 100, { from: accounts[0] }); //not using call, triggering blockchain transaction, to check for logs from Approve event; metadata are passed as ms.sender
         }).then(function(receipt) {
             assert.equal(receipt.logs.length, 1, "Event was triggered!");
             assert.equal(receipt.logs[0].event, "Approval", "It is Approve event");
             assert.equal(receipt.logs[0].args._owner, accounts[0], "Tokens spedning is authorised by this account");
             assert.equal(receipt.logs[0].args._spender, accounts[1], "This account is allowed to spend owners money");
             assert.equal(receipt.logs[0].args._value, 100, "Approved amount to be spended");
+            return tokenInstance.allowance(accounts[0], accounts[1]);
+        }).then(function(allowance) {
+            assert.equal(allowance.toNumber(), 100, "Allowance for the account was successful");
         });
+     });
+
+     it("Sending delegated transfers", function() {
+         return DandysToken.deployed().then(function(instance) {
+            tokenInstance = instance;
+            fromAccount = accounts[2];
+            toAccount = accounts[3];
+            spendingAccount = accounts[4]; //the account which will spend money from msg.sender account            
+            //Transfer tokens to fromAccount
+            return tokenInstance.transfer(fromAccount, 100, { from: accounts[0] });
+         }).then(function(receipt) {
+            //Approve spendingAccount to spend msg.sender account Tokens
+            return tokenInstance.approve(spendingAccount, 10, { from: fromAccount });
+         }).then(function(receipt) {
+            //Try send more tokens than sender balance is
+            return tokenInstance.transferFrom(fromAccount, toAccount, 101, { from: spendingAccount });
+         }).then(assert.fail).catch(function(error) {
+            assert(error.message.indexOf("revert") >= 0, "We cannot transfer more than your balance");
+            //Transffering larger amount of tokens than approved balance
+            return tokenInstance.transferFrom(fromAccount, toAccount, 11, { from: spendingAccount }); //Only 10 tokens are approved for transferring
+         }).then(assert.fail).catch(function(error) {
+            assert(error.message.indexOf("revert") >= 0, "We cannot transfer more than approved amount");
+            return tokenInstance.transferFrom.call(fromAccount, toAccount, 10, { from: spendingAccount }); //testing only output
+         }).then(function(success) {
+            assert.equal(success, true, "Transfer from account to another account was successful");
+            return tokenInstance.transferFrom(fromAccount, toAccount, 10, { from: spendingAccount });
+         }).then(function(receipt) {
+            assert.equal(receipt.logs.length, 1, "Event was triggered!");
+            assert.equal(receipt.logs[0].event, "Transfer", "It is Transfer event");
+            assert.equal(receipt.logs[0].args._from, fromAccount, "From where are the tokens transferred");
+            assert.equal(receipt.logs[0].args._to, toAccount, "To who are the tokens transferred");
+            assert.equal(receipt.logs[0].args._value, 10, "Transferred amount");
+            //Check if right amount was spend
+            return tokenInstance.balanceOf(fromAccount);
+         }).then(function(accountbalance) {
+            assert.equal(accountbalance.toNumber(), 90, "Right amount of tokens were spend from the account"); //Initially there were 100 tokens and we spend 10 of them so there should be 90 left
+            return tokenInstance.balanceOf(fromAccount);
+         });
      });
  })

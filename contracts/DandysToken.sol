@@ -54,8 +54,25 @@ contract DandysToken {
     //Delegated transfer - action performed by the name of one account, but which is paid by the second account, not used by our crypto, but needed by ERC20, something like approve bank manager to invest your money
     //approve event
     function approve(address _spender, uint256 _value) public returns (bool success) {
+        //Allowance
+        allowance[msg.sender][_spender] = _value;
+        
         //Aprove event
         emit Approval(msg.sender, _spender, _value);
+        
+        return true;
+    }
+
+    //Function for spending allowed amount of money from one account by the other account
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) { //state variables such as bool should be without _
+        //Make sure _from account has enough tokens
+        require(balanceOf[_from] >= _value);
+
+        //Make sure we dont transfer more tokens than we have approved
+        require(allowance[_from][msg.sender] >= _value);
+
+        //Transfer events
+        emit Transfer(_from, _to, _value);
         
         return true;
     }
