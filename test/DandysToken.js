@@ -14,13 +14,13 @@
             tokenInstance = instance;
             return tokenInstance.name();
         }).then(function(name) {
-            assert.equal(name, "Dandys Token", "Token has correct name, OK!");
+            assert.equal(name, "Dandys Coin", "Token has correct name, OK!");
             return tokenInstance.symbol();
         }).then(function(symbol) {
-            assert.equal(symbol, "DDT", "Token has correct symbol, OK!");
+            assert.equal(symbol, "DDC", "Token has correct symbol, OK!");
             return tokenInstance.standard();
         }).then(function(standard) {
-            assert.equal(standard, "DDT Token v1.0", "Token has correct standard, OK!");
+            assert.equal(standard, "DDC Token v1.0", "Token has correct standard, OK!");
         });
     });
 
@@ -122,4 +122,4 @@
             assert.equal(allowance.toNumber(), 0, "Checking if the allowance is set correctly"); //We were allowed to spend 10 tokens and we already did, so there should be 0 tokens left for spending
          });
      });
- })
+ });

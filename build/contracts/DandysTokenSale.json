@@ -1,0 +1,205 @@
+{
+  "contractName": "DandysTokenSale",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/DandysTokenSale.sol\":\"DandysTokenSale\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/DandysTokenSale.sol\":{\"keccak256\":\"0x64b3c75dabb6dc25af6cc153aad71caa62972e8fe10916fb767c98dc1eeb676d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://c63319269c487038e4f41e8b74afa47133e382e6081035dc84b66577a08092cb\",\"dweb:/ipfs/QmR8knA8WNKhUeKmdXF6mBwJkeABxPJh7tAeY4kJJNPCsg\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220ffb717288b1dceaf67c97256b2ab52a5cd8c0018e6057e8f41c3dbc28eb8456864736f6c634300080a0033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220ffb717288b1dceaf67c97256b2ab52a5cd8c0018e6057e8f41c3dbc28eb8456864736f6c634300080a0033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "71:220:1:-:0;;;103:185;;;;;;;;;;71:220;;;;;;",
+  "deployedSourceMap": "71:220:1:-:0;;;;;",
+  "source": "// SPDX-License-Identifier: MIT\r\n\r\npragma solidity >=0.4.22 <0.9.0;\r\n\r\ncontract DandysTokenSale {\r\n    constructor() {\r\n        //Assign an admin - superuser with special powers, external accout connected to blockchain\r\n        //Assign Token contract to\r\n        //Set Token price\r\n    }\r\n}",
+  "sourcePath": "C:\\Tom\\Visual Code-Projects\\My_Crypto\\contracts\\DandysTokenSale.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/DandysTokenSale.sol",
+    "exportedSymbols": {
+      "DandysTokenSale": [
+        192
+      ]
+    },
+    "id": 193,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 187,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.4",
+          ".22",
+          "<",
+          "0.9",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "35:32:1"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "DandysTokenSale",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 192,
+        "linearizedBaseContracts": [
+          192
+        ],
+        "name": "DandysTokenSale",
+        "nameLocation": "80:15:1",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 190,
+              "nodeType": "Block",
+              "src": "117:171:1",
+              "statements": []
+            },
+            "id": 191,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nameLocation": "-1:-1:-1",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 188,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "114:2:1"
+            },
+            "returnParameters": {
+              "id": 189,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "117:0:1"
+            },
+            "scope": 192,
+            "src": "103:185:1",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          }
+        ],
+        "scope": 193,
+        "src": "71:220:1",
+        "usedErrors": []
+      }
+    ],
+    "src": "35:256:1"
+  },
+  "legacyAST": {
+    "absolutePath": "project:/contracts/DandysTokenSale.sol",
+    "exportedSymbols": {
+      "DandysTokenSale": [
+        192
+      ]
+    },
+    "id": 193,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 187,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.4",
+          ".22",
+          "<",
+          "0.9",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "35:32:1"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "DandysTokenSale",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 192,
+        "linearizedBaseContracts": [
+          192
+        ],
+        "name": "DandysTokenSale",
+        "nameLocation": "80:15:1",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 190,
+              "nodeType": "Block",
+              "src": "117:171:1",
+              "statements": []
+            },
+            "id": 191,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nameLocation": "-1:-1:-1",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 188,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "114:2:1"
+            },
+            "returnParameters": {
+              "id": 189,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "117:0:1"
+            },
+            "scope": 192,
+            "src": "103:185:1",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          }
+        ],
+        "scope": 193,
+        "src": "71:220:1",
+        "usedErrors": []
+      }
+    ],
+    "src": "35:256:1"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.10+commit.fc410830.Emscripten.clang"
+  },
+  "networks": {
+    "5777": {
+      "events": {},
+      "links": {},
+      "address": "0x83a6323C90fBf63e8EC229283DFd4d91Ed0AefAB",
+      "transactionHash": "0x843b83b9dbcd02dd22b9d4c55d00b941609eabdf1512a8d59220623bd06ac508"
+    }
+  },
+  "schemaVersion": "3.4.4",
+  "updatedAt": "2021-12-21T20:55:08.972Z",
+  "networkType": "ethereum",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

@@ -7,11 +7,11 @@ pragma solidity >=0.4.22 <0.9.0;
 
 contract DandysToken {
     //Token name
-    string public name = "Dandys Token";
+    string public name = "Dandys Coin";
     //Token symbol
-    string public symbol = "DDT";
+    string public symbol = "DDC";
     //Token standard - not part of ERC20 standard
-    string public standard = "DDT Token v1.0";
+    string public standard = "DDC Token v1.0";
     //Total count of created tokens
     uint256 public totalSupply;
 
