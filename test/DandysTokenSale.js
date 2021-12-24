@@ -65,4 +65,24 @@ contract("DandysTokenSale", function(accounts) {
             assert(error.message.indexOf("revert") >= 0, "We cannot buy more tokens that are availableon our account");
         });
     });
+
+    it("Ending tokens sale", function() {
+        return DandysToken.deployed().then(function(instance) {
+            tokenInstance = instance;
+            return DandysTokenSale.deployed();
+        }).then(function(instance) {
+            tokenSaleInstance = instance;
+            //Try to end sale for nonadmin account - f.e. accounts[1] (variable buyer has its address) (admin account is accounts[0]) - should fail
+            return tokenSaleInstance.endSale({ from: buyer });
+        }).then(assert.file).catch(function(error) {
+            assert(error.message.indexOf("revert") >= 0, "Only admin can end the DandysToken sale!");
+            //End sale as admin
+            return tokenSaleInstance.endSale({ from: admin });
+        }).then(function(receipt) {
+            return tokenInstance.balanceOf(admin);
+        }).then(function(accountbalance) {
+            //Smart contract sold 11 tokens out of 1000000 so the rest is 1000000 - 11 = 999989
+            assert.equal(accountbalance.toNumber(), 999989, "The rest of the tokens were succesfully transfered back to admin");
+        });
+    });
 });

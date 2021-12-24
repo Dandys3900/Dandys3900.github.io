@@ -9,6 +9,7 @@ contract DandysTokenSale {
     DandysToken public tokenContract; //public - solidity automatically generetes function for us
     uint256 public tokenPrice;
     uint256 public tokensSold;
+    bool private disable;
 
     event Sell(address _buyer, uint256 _amount);
     
@@ -19,6 +20,7 @@ contract DandysTokenSale {
         tokenContract = _tokenContract;
         //Set Token price
         tokenPrice = _tokenPrice;
+        disable = false;
     }
 
     //Create safe function for calculation value of specifed amount of given tokens
@@ -28,6 +30,8 @@ contract DandysTokenSale {
 
     // Buy tokens
     function buyTokens(uint256 _numberOfTokens) public payable { //payable - send eth with this transaction, menas we need to pass some eth to function
+        // Check if contract isnt already disabled by selfdestruct function in endSale()
+        require(disable == false);
         //check number of tokens requires to their value, we want to avoid under/over paying
         require(msg.value == multiply(_numberOfTokens, tokenPrice)); //another metadata thanks to test function passing "value" parameter in metadata block
         //Check if the contract has enough tokens for sale, getting some tokens to our TokenSale on line 38 in test file
@@ -38,5 +42,17 @@ contract DandysTokenSale {
         tokensSold += _numberOfTokens;
         //Sell event
         emit Sell(msg.sender, _numberOfTokens);
+    }
+
+    //Ending Token DandysTokenSale - only admin can do that
+    function endSale() public {
+        //Check if only admin can do that
+        require(msg.sender == admin);
+        //Transfer remaining dapp tokens back to admin - tokens which nobody bought
+        require(tokenContract.transfer(admin, tokenContract.balanceOf(address(this))));
+        //Destroy (disable) contract
+        selfdestruct(payable(address(admin)));
+        //If line above is executed this contract is disabled - it is still in blockchain, but it cannot accept and proceed any other transactions
+        disable = true;
     }
 }
