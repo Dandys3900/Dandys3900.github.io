@@ -54,5 +54,7 @@ contract DandysTokenSale {
         selfdestruct(payable(address(admin)));
         //If line above is executed this contract is disabled - it is still in blockchain, but it cannot accept and proceed any other transactions
         disable = true;
+        //Double secure if anyone will try to buy some tokens from disabled contract
+        tokenPrice = 0;
     }
 }
