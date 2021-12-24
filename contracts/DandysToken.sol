@@ -34,7 +34,7 @@ contract DandysToken {
 
     //Construct
     constructor(uint256 _initSupply) { //_ - convencion, not compulsory
-        balanceOf[msg.sender] = _initSupply; //msg is global variable in Solidity, msg.sender is the address of account, adress of who called this function
+        balanceOf[msg.sender] = _initSupply; //msg is global variable in Solidity, msg.sender is the address of account, adress of who called this function, default accounts[0] has all tokens
         totalSupply = _initSupply; //Number of all tokens ever made
     }
     //Set the number of tokens

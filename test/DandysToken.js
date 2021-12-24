@@ -31,8 +31,8 @@
         }).then(function(totalSupply) {
             assert.equal(totalSupply.toNumber(), 1000000, "Numbers are same, OK!"); //Compare first and second argument and if they are same, print output
             return tokenInstance.balanceOf(accounts[0]); //the first account in our Ganache chain, accounts array is manages by Ganache itself, when not specified constroctur sets everything to the first account
-        }).then(function(accountBalance) {
-            assert.equal(accountBalance.toNumber(), 1000000, "Initial supply and account of 0# user are same, OK!");
+        }).then(function(accountbalance) {
+            assert.equal(accountbalance.toNumber(), 1000000, "Initial supply and account of 0# user are same, OK!");
         });
      });
 

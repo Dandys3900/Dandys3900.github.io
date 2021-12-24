@@ -23,16 +23,17 @@ contract DandysTokenSale {
 
     //Create safe function for calculation value of specifed amount of given tokens
     function multiply(uint x, uint y) internal pure returns (uint z) { //internal - only in contract, pure - not reading/writing in blockchain
-        require(y == 0 || (z = x * y) / y == x); //Taken from dsmath on Github
+        require(y == 0 || (z = x * y) / y == x); //Taken from dsmath on Github, avoiding data type overflow - overflow numbers usually becomes negative - reason for the check
     }
 
     // Buy tokens
     function buyTokens(uint256 _numberOfTokens) public payable { //payable - send eth with this transaction, menas we need to pass some eth to function
         //check number of tokens requires to their value, we want to avoid under/over paying
         require(msg.value == multiply(_numberOfTokens, tokenPrice)); //another metadata thanks to test function passing "value" parameter in metadata block
-
-        //Check if the contract has enough tokens for sale
-
+        //Check if the contract has enough tokens for sale, getting some tokens to our TokenSale on line 38 in test file
+        require(tokenContract.balanceOf(address(this)) >= _numberOfTokens);
+        // Check if a transfer was successful
+        require(tokenContract.transfer(msg.sender, _numberOfTokens)); //msg.sender is the buyer and we send him amount of tokens he wants, if smart contract has enough of them
         //Keep track of amount of sold tokens
         tokensSold += _numberOfTokens;
         //Sell event
