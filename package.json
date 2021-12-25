@@ -1,0 +1,20 @@
+{
+    "name": "dandys-token-sale",
+    "version": "1.0.0",
+    "description": "Dandys Token Sale ICO",
+    "main": "truffle-config.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "dev": "lite-server"
+    },
+    "author": "Tomas Daniel",
+    "license": "MIT",
+    "devDependencies": {
+        "lite-server": "^2.3.0"
+    },
+    "dependencies": {
+        "web3": "^1.6.1"
+    }
+}
