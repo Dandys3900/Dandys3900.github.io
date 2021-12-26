@@ -1,6 +1,4 @@
-import Web3 from "web3";
-
-App = {
+var App = {
     web3Provider: null, //At the begining
 
     init: function() {
@@ -11,8 +9,8 @@ App = {
     initWeb3: function() {
         if (typeof Web3 !== "undefined") {
             //If a web3 instance is already running and is provided by Meta Mask
-            App.web3Provider = web3.currentProvider;
-            web3 = new Web3(web3.currentProvider);
+            App.web3Provider = ethereum.currentProvider; //původně tam bylo web3.currentProvider
+            web3 = new Web3(ethereum.currentProvider);
         }
         else {
             //Specify default instance if no web3 instance is provided, if connection is not established with Meta Mask use local Ganache insted
