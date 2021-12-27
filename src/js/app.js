@@ -1,5 +1,6 @@
 var App = {
     web3Provider: null, //At the begining
+    contracts: {}, //Keep track of all our contracts
 
     init: function() {
         console.log("App is initialized");
@@ -17,6 +18,20 @@ var App = {
             App.web3Provider = new Web3.providers.HttpProvider("http://localhost:7545");
             web3 = new Web3(App.web3Provider);
         }
+
+        return App.initContracts();
+    },
+
+    initContracts: function() {
+        //Get data from the .json file, we dont need to add full path because we already did it in bs-config.json file
+        $.getJSON("DandysTokenSale.json", function(dandysTokenSale) { //Basically connecting to our network ans start working with smart contract
+            App.contracts.DandysTokenSale = TruffleContract(dandysTokenSale); //Truffle contract will allow us read and interact with our contracts
+            App.contracts.DandysTokenSale.setProvider(App.web3Provider);
+            //Test if we get address, meaning that contract is initialized successfully
+            App.contracts.DandysTokenSale.deployed().then(function(dandysTokenSale) {
+                console.log("Dandys Token Sale Address: ", dandysTokenSale.address);
+            });
+        });
     }
 }
 
