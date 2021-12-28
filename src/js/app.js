@@ -4,6 +4,8 @@ var App = {
     account: "0x0", //Default null address, empty
     loading: false,
     tokenPrice: 1000000000000000,
+    tokensSold: 0,
+    tokensAvailable: 0,
 
     init: function() {
         console.log("App is initialized");
@@ -61,25 +63,67 @@ var App = {
 
         //Load account data
         web3.eth.getCoinbase(function(err, account) {
-            if (err === null) {
+            if (err === null) { //no error
                 App.account = account;
                 $("#accountAddress").html("Your account address is " + "<b>" + account + "</b>");
             }
         });
 
         var dandysTokenSaleInstance;
+        var dandysTokenInstance;
 
         App.contracts.DandysTokenSale.deployed().then(function(instance) {
             dandysTokenSaleInstance = instance;
+            return App.contracts.DandysToken.deployed();
+        }).then(function(instance) {
+            dandysTokenInstance = instance;
             return dandysTokenSaleInstance.tokenPrice();
         }).then(function(tokenPrice) {
             App.tokenPrice = tokenPrice;
-            $(".token-price").html(web3.utils.fromWei(App.tokenPrice, "ether")); //span class is with . instead of #
-        });
+            $(".token-price").html(web3.utils.fromWei(App.tokenPrice, "ether")); //span class is with . instead of #, because it is class not id
+            return dandysTokenSaleInstance.tokensSold();
+        }).then(function(tokensSold) {
+            App.tokensSold = tokensSold.toNumber();
+            $(".tokens-sold").html(App.tokensSold);
+            return dandysTokenInstance.totalSupply();
+        }).then(function(totalSupply) {
+            App.tokensAvailable = totalSupply.toNumber();
+            $(".tokens-available").html(App.tokensAvailable);
 
-        App.loading = false;
-        loader.hide();
-        content.show();
+            var progressPercent = ((App.tokensSold / App.tokensAvailable) * 100);
+            $("#progress").css("width", progressPercent + "%"); //We setting width of progress bar in procents and display it
+
+            //Loading token contract in order to get current user´s balance
+            return dandysTokenInstance.balanceOf(App.account);
+        }).then(function(accountbalance) {
+            $(".dandystoken-balance").html(accountbalance.toNumber());
+
+            //After all data are loaded loading animation should disapper
+            App.loading = false;
+            loader.hide();
+            content.show();
+        });
+    },
+
+    buyTokens: function() {
+        $("#content").hide();
+        $("#loader").show();
+
+        var numberOfTokens = $("#numberOfTokens").val(); //after button click, find out how many tokens want to be boundLength
+        App.contracts.DandysTokenSale.deployed().then(function(instance) {
+            return instance.buyTokens(numberOfTokens, {
+                //Meta data
+                from: App.account,
+                value: numberOfTokens * App.tokenPrice,
+                gas: 500000
+            });
+        }).then(function(result) {
+            console.log("-> Tokens bought, amount: " + numberOfTokens + ", receiver: " + App.account);
+            $("form").trigger("reset"); //reset number in form (v tom řádku nalevo od buttonu) to 0
+            
+            $("#content").show();
+            $("#loader").hide();
+        });
     }
 }
 

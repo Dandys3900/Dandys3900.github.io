@@ -1,6 +1,18 @@
 /* <!-- Google Fonts --> */
-@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Quicksand&display=swap");
 
-h1, body {
-    font-family: 'Quicksand', sans-serif;
+h1, body, p {
+    font-family: "Quicksand", sans-serif;
+    color: white;
+    
+    background-image: url("background.jpeg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+
+h2 {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
