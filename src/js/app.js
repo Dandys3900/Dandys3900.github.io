@@ -43,25 +43,10 @@ var App = {
                     console.log("Dandys Token Address: ", dandysToken.address);
                 });
 
-                //App.listenForEvents();
                 return App.render(); //Show data
             });
         });
     },
-
-    /*Listening for events from blockchain, f.e. Seel event
-    listenForEvents: function() {
-        App.contracts.DandysTokenSale.deployed().then(function(instance) {
-            instance.Sell({}, {
-                fromBlock: 0,
-                toBlock: "latest",
-            }).done(function(error, event) {
-               console.log("-> Event was trigerred", event);
-               //Refresh the page
-               App.render(); 
-            });
-        });
-    },*/
 
     //Function for displaying all stuff on the page, we will switch between showing data and loading animation
     render: function() {
