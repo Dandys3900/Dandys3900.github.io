@@ -24,6 +24,17 @@ h2 {
     animation-timing-function: linear;
 }
 
+.donate {
+    display: none;
+}
+
+.spin:hover + .donate {
+    border: 2px solid goldenrod;
+    border-radius: 5px;
+    display: block;
+    color: white;
+}
+
 @keyframes spinAround {
     from { transform: rotateY(0deg) }
     to { transform: rotateY(360deg) }
