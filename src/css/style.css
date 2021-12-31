@@ -17,22 +17,21 @@ h2 {
     left: 0;
 }
 
+/* <!-- Donate Frame CSS --> */
+.donate {
+    position: absolute;
+    bottom: 0;
+    border: 2px solid goldenrod;
+    border-radius: 5px;
+    color: white;
+}
+
+/* <!-- Spinning Logo --> */
 .spin {
     animation-name: spinAround;
     animation-duration: 2s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
-}
-
-.donate {
-    display: none;
-}
-
-.spin:hover + .donate {
-    border: 2px solid goldenrod;
-    border-radius: 5px;
-    display: block;
-    color: white;
 }
 
 @keyframes spinAround {
