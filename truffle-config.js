@@ -52,12 +52,12 @@ module.exports = {
       port: "7545", /*According to Ganache info*/
       network_id: "*" /*Maches any network id*/
     },
-    rinkeby: {
-      host: "localhost", /*Set to our localhost*/
-      port: 8545, /*Geth network port*/
-      network_id: 4, /*1 - mainnet, ...4 -rinkeby */
-      gas: 4700000
-    }
+    //rinkeby: {
+      //host: "localhost", /*Set to our localhost*/
+      //port: 8545, /*Geth network port*/
+      //network_id: 4, /*1 - mainnet, ...4 -rinkeby */
+      //gas: 4700000
+    //}
   },
 
   // Set default mocha options here, use special reporters etc.
