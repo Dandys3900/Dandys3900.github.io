@@ -56,6 +56,7 @@ module.exports = {
     },
     rinkeby: {
       provider: function() {
+        //to první je recovery phrase z MetaMask a to druhé je adresa získaná z infury
         return new HDWalletProvider("glad belt dirt age derive umbrella weird gospel park pottery hamster best", "https://rinkeby.infura.io/v3/45f80e0c0d9a4993b082feb603e2e598");
       },
       network_id: 4, /*1 - mainnet, ...4 -rinkeby */
