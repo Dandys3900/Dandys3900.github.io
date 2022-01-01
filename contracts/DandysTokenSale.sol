@@ -2,11 +2,11 @@
 
 pragma solidity >=0.4.22 <0.9.0;
 
-import "./DandysToken.sol"; //in order to use DandysToken var on line 9
+import "./DandysToken.sol";
 
 contract DandysTokenSale {
-    address admin; //keep trace of admin account, not public, dont want to expose it to public
-    DandysToken public tokenContract; //public - solidity automatically generetes function for us
+    address admin;
+    DandysToken public tokenContract;
     uint256 public tokenPrice;
     uint256 public tokensSold;
     bool private disable;
@@ -14,47 +14,33 @@ contract DandysTokenSale {
     event Sell(address _buyer, uint256 _amount);
     
     constructor(DandysToken _tokenContract, uint256 _tokenPrice) {
-        //Assign an admin - superuser with special powers, external accout connected to blockchain
         admin = msg.sender;
-        //Assign Token contract from admin account
         tokenContract = _tokenContract;
-        //Set Token price
         tokenPrice = _tokenPrice;
         disable = false;
     }
 
-    //Create safe function for calculation value of specifed amount of given tokens
-    function multiply(uint x, uint y) internal pure returns (uint z) { //internal - only in contract, pure - not reading/writing in blockchain
-        require(y == 0 || (z = x * y) / y == x); //Taken from dsmath on Github, avoiding data type overflow - overflow numbers usually becomes negative - reason for the check
+    function multiply(uint x, uint y) internal pure returns (uint z) {
+        require(y == 0 || (z = x * y) / y == x);
     }
 
-    // Buy tokens
-    function buyTokens(uint256 _numberOfTokens) public payable { //payable - send eth with this transaction, menas we need to pass some eth to function
-        // Check if contract isnt already disabled by selfdestruct function in endSale()
+    function buyTokens(uint256 _numberOfTokens) public payable {
         require(disable == false);
-        //check number of tokens requires to their value, we want to avoid under/over paying
-        require(msg.value == multiply(_numberOfTokens, tokenPrice)); //another metadata thanks to test function passing "value" parameter in metadata block
-        //Check if the contract has enough tokens for sale, getting some tokens to our TokenSale on line 38 in test file
+        require(msg.value == multiply(_numberOfTokens, tokenPrice));
         require(tokenContract.balanceOf(address(this)) >= _numberOfTokens);
-        // Check if a transfer was successful
-        require(tokenContract.transfer(msg.sender, _numberOfTokens)); //msg.sender is the buyer and we send him amount of tokens he wants, if smart contract has enough of them
-        //Keep track of amount of sold tokens
+        require(tokenContract.transfer(msg.sender, _numberOfTokens));
+
         tokensSold += _numberOfTokens;
-        //Sell event
+
         emit Sell(msg.sender, _numberOfTokens);
     }
 
-    //Ending Token DandysTokenSale - only admin can do that
     function endSale() public {
-        //Check if only admin can do that
         require(msg.sender == admin);
-        //Transfer remaining dapp tokens back to admin - tokens which nobody bought
         require(tokenContract.transfer(admin, tokenContract.balanceOf(address(this))));
-        //Destroy (disable) contract
+
         selfdestruct(payable(address(admin)));
-        //If line above is executed this contract is disabled - it is still in blockchain, but it cannot accept and proceed any other transactions
         disable = true;
-        //Double secure if anyone will try to buy some tokens from disabled contract
         tokenPrice = 0;
     }
 }
