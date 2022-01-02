@@ -21,6 +21,13 @@ h2 {
     left: 0;
 }
 
+/* <!-- Buy Tokens Button --> */
+.btn {
+    font-family: "Quicksand", sans-serif !important;
+    background-color: goldenrod !important;
+    font-weight: bold !important;
+}
+
 /* <!-- Page Title --> */
 .banner {
     font-family: 'Comforter Brush', cursive;
