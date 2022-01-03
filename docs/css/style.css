@@ -21,6 +21,28 @@ h2 {
     left: 0;
 }
 
+/* <!-- Help Button --> */
+.help-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+/* <!-- Help Button Text --> */
+.help-text {
+    display: none;
+}
+
+.help-button:hover + .help-text {
+    font-family: "Quicksand", sans-serif;
+    width: 250px;
+    position: absolute;
+    bottom: 50px;
+    right: 0;
+    display: block;
+    color: white;
+}
+
 /* <!-- Buy Tokens Button --> */
 .btn {
     font-family: "Quicksand", sans-serif !important;
@@ -52,6 +74,7 @@ h2 {
     animation-timing-function: linear;
 }
 
+/* <!-- Spinning Logo Animation --> */
 @keyframes spinAround {
     from { transform: rotateY(0deg) }
     to { transform: rotateY(360deg) }
