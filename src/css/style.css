@@ -79,3 +79,27 @@ h2 {
     from { transform: rotateY(0deg) }
     to { transform: rotateY(360deg) }
 }
+
+@media screen and (max-width: 810px) {
+    .banner {
+        font-size: 75px;
+    }
+
+    .help-button:hover + .help-text {
+        width: 400px;
+        position: absolute;
+        bottom: 50px;
+        right: 0;
+        display: block;
+    }
+    
+    .spin {
+        height: 65px;
+        width: 65px;
+    }
+
+    .help-button {
+        bottom: 40px;
+        right: 0;
+    }
+}
