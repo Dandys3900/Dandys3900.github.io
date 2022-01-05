@@ -22,7 +22,7 @@ var App = {
             web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
         }
 
-        App.web3Provider=web3.currentProvider;
+        App.web3Provider = web3.currentProvider;
         return App.initContracts();
     },
 
@@ -106,8 +106,11 @@ var App = {
     },
 
     buyTokens: function() {
-        $("#content").hide();
-        $("#loader").show();
+        var loader = $("#loader");
+        var content = $("#content");
+
+        content.hide();
+        loader.show();
 
         var numberOfTokens = $("#numberOfTokens").val(); //after button click, find out how many tokens want to be boundLength
         App.contracts.DandysTokenSale.deployed().then(function(instance) {
@@ -118,12 +121,11 @@ var App = {
                 gas: 500000
             });
         }).then(function(result) {
-            console.log("-> Tokens bought, amount: " + numberOfTokens + ", receiver: " + App.account);
             $("form").trigger("reset"); //reset number in form (v tom řádku nalevo od buttonu) to 0
 
-            location.reload();
-            $("#content").show();
-            $("#loader").hide();
+            window.location.reload();
+            content.show();
+            loader.hide();
         });
     }
 }
