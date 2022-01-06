@@ -61,6 +61,11 @@ var App = {
         loader.show(); //if loading is true, we want to see loading animation and hide all the data
         content.hide();
 
+        //Reload Page When Connected to MetaMask
+        window.onfocus = () => {
+            window.location.reload();
+        }
+
         //Load account data
         web3.eth.getCoinbase(function(err, account) {
             if (err === null) { //no error
