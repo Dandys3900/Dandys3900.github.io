@@ -3,6 +3,10 @@
 const DandysToken = artifacts.require("DandysToken");
 const DandysTokenSale = artifacts.require("DandysTokenSale");
 
+/************************************************************************/
+/*  Create instances of both DandysToken and DandysTokenSale and set    */
+/*  token price to exact amount of wei(smallest denomination of ether). */
+/************************************************************************/
 module.exports = function (deployer) {
   deployer.deploy(DandysToken, 1000000).then(function() {
     var tokenPrice = 1000000000000000;

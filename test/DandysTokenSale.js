@@ -4,16 +4,16 @@ const DandysTokenSale = artifacts.require("DandysTokenSale");
 contract("DandysTokenSale", function(accounts) {
     var tokenInstance;
     var tokenSaleInstance;
-    var admin = accounts[0]; //In DandysToken.sol we set balance of msg.sender to all tokens, and msg.sender is by default the first account - accounts[0]
-    var buyer = accounts[1]; //random selection
-    var tokenPrice = 1000000000000000; //in wei - 0.001eth, the way we keep track of ether in solidity, the smallest unit of ethrium crypto, viz. etherconverter.online
-    var tokensAvailable = 750000; //75% of 1mil tokens, randomly selected
+    var admin = accounts[0]; // By default admin accoutn is the first one in the blockchain
+    var buyer = accounts[1]; // Randomly selected
+    var tokenPrice = 1000000000000000; // =0.001ETH, see "etherconverter.online"
+    var tokensAvailable = 750000; // 75% of all available tokens, randomly selected
     var numberOfTokens;
     var value;
 
     it("Initializing contract with the correct values", function() {
         return DandysTokenSale.deployed().then(function(instance) {
-            tokenSaleInstance = instance; //keep track of the instance
+            tokenSaleInstance = instance;
             return tokenSaleInstance.address;
         }).then(function(address) {
             assert.notEqual(address, 0x0, "Correct address was used!");
@@ -32,13 +32,11 @@ contract("DandysTokenSale", function(accounts) {
             tokenInstance = instance;
             return DandysTokenSale.deployed();
         }).then(function(instance) {
-            // Then token sale instance, we have now access to both tokens instances
-            tokenSaleInstance = instance; //keep track of the instance
-            // Provision of 75% of all tokens get to TokenSale contract
-            return tokenInstance.transfer(tokenSaleInstance.address, tokensAvailable, { from: admin });
-        }).then(function(receipt) { //receipt because it is transaction
+            tokenSaleInstance = instance;
+            return tokenInstance.transfer(tokenSaleInstance.address, tokensAvailable, { from: admin }); // Transfer 75% of the available tokens to the Smart Contract
+        }).then(function(receipt) {
             numberOfTokens = 11;
-            value = numberOfTokens * tokenPrice; //total price of buyed tokens in wei
+            value = numberOfTokens * tokenPrice; // In wei
             return tokenSaleInstance.buyTokens(numberOfTokens, { from: buyer, value: value });
         }).then(function(receipt) {
             assert.equal(receipt.logs.length, 1, "Event was triggered!");
@@ -47,19 +45,16 @@ contract("DandysTokenSale", function(accounts) {
             assert.equal(receipt.logs[0].args._amount, numberOfTokens, "The number of sold tokens");
             return tokenSaleInstance.tokensSold();
         }).then(function(amount) {
-            assert.equal(amount.toNumber(), numberOfTokens, "Number of sold tokens and bought tokens are same"); //we just bought some tokens and we want to make sure that the same amount of tokens was sold
+            assert.equal(amount.toNumber(), numberOfTokens, "Number of sold tokens and bought tokens are same"); // Amount of the sold tokens should be equal to the number of the bought tokens
             return tokenInstance.balanceOf(buyer);
         }).then(function(accountbalance) {
             assert.equal(accountbalance.toNumber(), numberOfTokens);
             return tokenInstance.balanceOf(tokenSaleInstance.address);
         }).then(function(accountbalance) {
-            //The buyer has bought 11 tokens from our smart contract, see line 42, so now balance of smart contract should be lower by 11, THE SMART CONTRACT IS IN FACT A BANK WHERE BUYERS CAN BU TOKENS
-            assert.equal(accountbalance.toNumber(), (tokensAvailable - numberOfTokens));
-            //Try to buy tokens different from the ether value
-            return tokenSaleInstance.buyTokens(numberOfTokens, { from: buyer, value: 1 }); //in wei, we try to buy 11 tokens for only 1 wei, which should not pass
+            assert.equal(accountbalance.toNumber(), (tokensAvailable - numberOfTokens)); // Balance of the Smart Contract should be lower by 11 tokens, since we bought them
+            return tokenSaleInstance.buyTokens(numberOfTokens, { from: buyer, value: 1 }); // Again in wei, we try to buy 11 tokens for only 1 wei, which should not pass
         }).then(assert.file).catch(function(error) {
             assert(error.message.indexOf("revert") >= 0, "msg.value must be equal to price of tokens in wei");
-            // We want to buy more tokens that TokenSale has (with the correct value), it has 750000 tokens, see line 38
             return tokenSaleInstance.buyTokens(755000, { from: buyer, value: value });
         }).then(assert.file).catch(function(error) {
             assert(error.message.indexOf("revert") >= 0, "We cannot buy more tokens that are availableon our account");
@@ -72,17 +67,14 @@ contract("DandysTokenSale", function(accounts) {
             return DandysTokenSale.deployed();
         }).then(function(instance) {
             tokenSaleInstance = instance;
-            //Try to end sale for nonadmin account - f.e. accounts[1] (variable buyer has its address) (admin account is accounts[0]) - should fail
-            return tokenSaleInstance.endSale({ from: buyer });
+            return tokenSaleInstance.endSale({ from: buyer }); // Token sale can be ended only by the admin
         }).then(assert.file).catch(function(error) {
             assert(error.message.indexOf("revert") >= 0, "Only admin can end the DandysToken sale!");
-            //End sale as admin
             return tokenSaleInstance.endSale({ from: admin });
         }).then(function(receipt) {
             return tokenInstance.balanceOf(admin);
         }).then(function(accountbalance) {
-            //Smart contract sold 11 tokens out of 1000000 so the rest is 1000000 - 11 = 999989
-            assert.equal(accountbalance.toNumber(), 999989, "The rest of the tokens were succesfully transfered back to admin");
+            assert.equal(accountbalance.toNumber(), 999989, "The rest of the tokens were succesfully transfered back to admin"); // Test if the rest of the tokens from ended Smart Contract was transfered back to the admin
         });
     });
 });

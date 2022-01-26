@@ -1,7 +1,7 @@
 var App = {
-    web3Provider: null, //At the begining
-    contracts: {}, //Keep track of all our contracts
-    account: "0x0", //Default null address, empty
+    web3Provider: null,
+    contracts: {}, // Array of all deployed instances
+    account: "0x0", // Default value
     loading: false,
     tokenPrice: 1000000000000000,
     tokensSold: 0,
@@ -12,6 +12,10 @@ var App = {
         return App.initWeb3();
     },
 
+    /************************************************************************/
+    /*  initWeb3() function to initialize the Web3 framework and set        */
+    /*  HttpProvider for communication with the blockchain.                 */
+    /************************************************************************/
     initWeb3: function() {
         if (typeof Web3 !== "undefined") {
             ethereum.enable().then(() => {
@@ -26,16 +30,19 @@ var App = {
         return App.initContracts();
     },
 
+    /************************************************************************/
+    /*  initContracts() initializing both Smart contracts - DandysToken and */
+    /*  DandysTokenSale and print addresses of both of them to the terminal.*/
+    /************************************************************************/
     initContracts: function() {
-        //Get data from the .json file, we dont need to add full path because we already did it in bs-config.json file
-        $.getJSON("DandysTokenSale.json", function(dandysTokenSale) { //Basically connecting to our network ans start working with smart contract
-            App.contracts.DandysTokenSale = TruffleContract(dandysTokenSale); //Truffle contract will allow us read and interact with our contracts
+        $.getJSON("DandysTokenSale.json", function(dandysTokenSale) { // Connecting to our network and to smart contract
+            App.contracts.DandysTokenSale = TruffleContract(dandysTokenSale); //Truffle contract allows reading and interacting with the smart contract
             App.contracts.DandysTokenSale.setProvider(App.web3Provider);
             //Test if we get address, meaning that contract is initialized successfully
             App.contracts.DandysTokenSale.deployed().then(function(dandysTokenSale) {
                 console.log("Dandys Token Sale Address: ", dandysTokenSale.address);
             });
-        }).done(function() { //We also need to connect DandysToken not only DandysTokenSale
+        }).done(function() {
             $.getJSON("DandysToken.json", function(dandysToken) {
                 App.contracts.DandysToken = TruffleContract(dandysToken);
                 App.contracts.DandysToken.setProvider(App.web3Provider);
@@ -43,32 +50,35 @@ var App = {
                     console.log("Dandys Token Address: ", dandysToken.address);
                 });
 
-                return App.render(); //Show data
+                return App.render();
             });
         });
     },
 
-    //Function for displaying all stuff on the page, we will switch between showing data and loading animation
+    /************************************************************************/
+    /*  render() function displays all required data to the web page by     */
+    /*  using the promise chains and Smart contract instances and setting   */
+    /*  proper values to HTML entities and classes.                         */
+    /************************************************************************/
     render: function() {
-        if (App.loading) { //When loading we dont want to display any other data
+        if (App.loading) {
             return;
         }
         App.loading = true;
 
-        var loader = $("#loader"); //the names came from html file, we want to keep track of these divs
+        var loader = $("#loader");
         var content = $("#content");
 
-        loader.show(); //if loading is true, we want to see loading animation and hide all the data
+        loader.show();
         content.hide();
 
-        //Reload Page When Connected to MetaMask
+        // Reload the web page when succesfully connected to the MetaMask
         window.onfocus = () => {
             window.location.reload();
         }
 
-        //Load account data
         web3.eth.getCoinbase(function(err, account) {
-            if (err === null) { //no error
+            if (err === null) {
                 App.account = account;
                 $("#accountAddress").html("Your account address is " + "<b style='color: goldenrod;'>" + account + "</b>");
             }
@@ -85,7 +95,7 @@ var App = {
             return dandysTokenSaleInstance.tokenPrice();
         }).then(function(tokenPrice) {
             App.tokenPrice = tokenPrice;
-            $(".token-price").html(web3.utils.fromWei(App.tokenPrice, "ether")); //span class is with . instead of #, because it is class not id
+            $(".token-price").html(web3.utils.fromWei(App.tokenPrice, "ether")); // Span class is with "." instead of "#"
             return dandysTokenSaleInstance.tokensSold();
         }).then(function(tokensSold) {
             App.tokensSold = tokensSold.toNumber();
@@ -96,20 +106,23 @@ var App = {
             $(".tokens-available").html(App.tokensAvailable);
 
             var progressPercent = ((App.tokensSold / App.tokensAvailable) * 100);
-            $("#progress").css("width", progressPercent + "%"); //We setting width of progress bar in procents and display it
+            $("#progress").css("width", progressPercent + "%"); // Div class is with "#" instead of "."
 
-            //Loading token contract in order to get current user´s balance
             return dandysTokenInstance.balanceOf(App.account);
         }).then(function(accountbalance) {
             $(".dandystoken-balance").html(accountbalance.toNumber());
 
-            //After all data are loaded loading animation should disapper
             App.loading = false;
             loader.hide();
             content.show();
         });
     },
 
+    /************************************************************************/
+    /*  buyTokens() function transfers exact amount of the                  */
+    /*  tokens(_numberOfTokens) to actual account which is connected to the */
+    /*  blockchain by the MetaMask and update user´s balance of the tokens. */
+    /************************************************************************/
     buyTokens: function() {
         var loader = $("#loader");
         var content = $("#content");
@@ -117,16 +130,16 @@ var App = {
         content.hide();
         loader.show();
 
-        var numberOfTokens = $("#numberOfTokens").val(); //after button click, find out how many tokens want to be boundLength
+        var numberOfTokens = $("#numberOfTokens").val(); // Get value from HTML element on the web page
         App.contracts.DandysTokenSale.deployed().then(function(instance) {
             return instance.buyTokens(numberOfTokens, {
-                //Meta data
+                // Meta data
                 from: App.account,
                 value: numberOfTokens * App.tokenPrice,
                 gas: 500000
             });
         }).then(function(result) {
-            $("form").trigger("reset"); //reset number in form (v tom řádku nalevo od buttonu) to 0
+            $("form").trigger("reset"); // Reset number in HTML element on the web page
 
             window.location.reload();
             content.show();
