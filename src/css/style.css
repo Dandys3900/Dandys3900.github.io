@@ -9,7 +9,7 @@ h1, body, p {
     font-family: "Quicksand", sans-serif;
     color: white;
     
-    background-image: url("background.jpeg");
+    background-image: url("background2.jpeg");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: 100% 100%;
@@ -82,7 +82,7 @@ h2 {
 
 @media screen and (max-width: 810px) {
     .banner {
-        font-size: 75px;
+        font-size: 10vh;    
     }
 
     .help-button:hover + .help-text {
@@ -94,12 +94,15 @@ h2 {
     }
     
     .spin {
-        height: 65px;
-        width: 65px;
+        display: none;
     }
 
     .help-button {
-        bottom: 40px;
         right: 0;
+        bottom: 0;
+    }
+
+    .donate {
+        width: 45vh;
     }
 }
