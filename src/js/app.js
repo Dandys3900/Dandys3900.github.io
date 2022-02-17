@@ -18,9 +18,9 @@ var App = {
     /************************************************************************/
     initWeb3: function() {
         if (typeof Web3 !== "undefined") {
-            ethereum.enable().then(() => {
-                web3 = new Web3(web3.currentProvider);
-             });
+            //ethereum.enable().then(() => {
+                web3 = new Web3(window.ethereum);
+             //});
         }
         else {
             web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
@@ -37,7 +37,7 @@ var App = {
     initContracts: function() {
         $.getJSON("DandysTokenSale.json", function(dandysTokenSale) { // Connecting to our network and to smart contract
             App.contracts.DandysTokenSale = TruffleContract(dandysTokenSale); //Truffle contract allows reading and interacting with the smart contract
-            App.contracts.DandysTokenSale.setProvider(App.web3Provider);
+            App.contracts.DandysTokenSale.setProvider(web3.currentProvider);
             //Test if we get address, meaning that contract is initialized successfully
             App.contracts.DandysTokenSale.deployed().then(function(dandysTokenSale) {
                 console.log("Dandys Token Sale Address: ", dandysTokenSale.address);
