@@ -18,9 +18,9 @@ var App = {
     /************************************************************************/
     initWeb3: function() {
         if (typeof Web3 !== "undefined") {
-            //ethereum.enable().then(() => {
+            ethereum.enable().then(() => {
                 web3 = new Web3(window.ethereum);
-             //});
+            });
         }
         else {
             web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
