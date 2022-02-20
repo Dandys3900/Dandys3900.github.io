@@ -126,7 +126,6 @@ var App = {
     buyTokens: function() {
         var loader = $("#loader");
         var content = $("#content");
-        var act_balance = App.userBalance;
 
         content.hide();
         loader.show();
