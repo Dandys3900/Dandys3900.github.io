@@ -77,15 +77,15 @@ var App = {
             window.location.reload();
         }
 
-        /*web3.eth.getCoinbase(function(err, account) {
+        web3.eth.getCoinbase(function(err, account) {
             if (err === null) {
                 App.account = account;
                 $("#accountAddress").html("Your account address is " + "<b style='color: goldenrod;'>" + account + "</b>");
             }
-        });*/
+        });
 
-        App.account = web3.eth.getCoinbase();
-        $("#accountAddress").html("Your account address is " + "<b style='color: goldenrod;'>" + App.account + "</b>");
+        /*App.account = web3.eth.getCoinbase();
+        $("#accountAddress").html("Your account address is " + "<b style='color: goldenrod;'>" + App.account + "</b>");*/
 
         var dandysTokenSaleInstance;
         var dandysTokenInstance;
@@ -157,10 +157,10 @@ var App = {
         }).then(function(result) {
             $("form").trigger("reset"); // Reset number in HTML element on the web page
 
-            /*var new_balance = App.getAccountBalance();
+            var new_balance = App.getAccountBalance();
             while (new_balance == act_balance) {
                 new_balance = App.getAccountBalance();
-            }*/
+            }
 
             window.location.reload();
             content.show();
