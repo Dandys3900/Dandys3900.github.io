@@ -121,6 +121,18 @@ var App = {
         });
     },
 
+    getAccountBalance: function() {
+        App.contracts.DandysTokenSale.deployed().then(function(instance) {
+            dandysTokenSaleInstance = instance;
+            return App.contracts.DandysToken.deployed();
+        }).then(function(instance) {
+            dandysTokenInstance = instance;
+            return dandysTokenInstance.balanceOf(App.account);
+        }).then(function(accountbalance) {
+            return accountbalance.toNumber();
+        });
+    },
+
     /************************************************************************/
     /*  buyTokens() function transfers exact amount of the                  */
     /*  tokens(_numberOfTokens) to actual account which is connected to the */
@@ -129,6 +141,7 @@ var App = {
     buyTokens: function() {
         var loader = $("#loader");
         var content = $("#content");
+        var act_balance = App.getAccountBalance();
 
         content.hide();
         loader.show();
@@ -143,6 +156,11 @@ var App = {
             });
         }).then(function(result) {
             $("form").trigger("reset"); // Reset number in HTML element on the web page
+
+            var new_balance = App.getAccountBalance();
+            while (new_balance == act_balance) {
+                new_balance = App.getAccountBalance();
+            }
 
             window.location.reload();
             content.show();
