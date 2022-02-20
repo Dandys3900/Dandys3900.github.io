@@ -85,7 +85,7 @@ var App = {
         });*/
 
         App.account = web3.eth.getCoinbase();
-        $("#accountAddress").html("Your account address is " + "<b style='color: goldenrod;'>" + account + "</b>");
+        $("#accountAddress").html("Your account address is " + "<b style='color: goldenrod;'>" + App.account + "</b>");
 
         var dandysTokenSaleInstance;
         var dandysTokenInstance;
