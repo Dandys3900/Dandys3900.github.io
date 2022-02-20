@@ -6,6 +6,7 @@ var App = {
     tokenPrice: 1000000000000000,
     tokensSold: 0,
     tokensAvailable: 0,
+    userBalance: 0,
 
     init: function() {
         console.log("App is initialized");
@@ -84,9 +85,6 @@ var App = {
             }
         });
 
-        /*App.account = web3.eth.getCoinbase();
-        $("#accountAddress").html("Your account address is " + "<b style='color: goldenrod;'>" + App.account + "</b>");*/
-
         var dandysTokenSaleInstance;
         var dandysTokenInstance;
 
@@ -129,7 +127,7 @@ var App = {
             dandysTokenInstance = instance;
             return dandysTokenInstance.balanceOf(App.account);
         }).then(function(accountbalance) {
-            return accountbalance.toNumber();
+            App.userBalance = accountbalance.toNumber();
         });
     },
 
@@ -141,7 +139,7 @@ var App = {
     buyTokens: function() {
         var loader = $("#loader");
         var content = $("#content");
-        var act_balance = App.getAccountBalance();
+        var act_balance = App.userBalance;
 
         content.hide();
         loader.show();
@@ -157,9 +155,10 @@ var App = {
         }).then(function(result) {
             $("form").trigger("reset"); // Reset number in HTML element on the web page
 
-            var new_balance = App.getAccountBalance();
-            while (new_balance == act_balance) {
-                new_balance = App.getAccountBalance();
+            while (App.userBalance == act_balance) {
+                App.getAccountBalance();
+                content.hide();
+                loader.show();
             }
 
             window.location.reload();
