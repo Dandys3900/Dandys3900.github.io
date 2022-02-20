@@ -139,11 +139,12 @@ var App = {
                 gas: 500000
             });
         }).then(function(result) {
-            $("form").trigger("reset"); // Reset number in HTML element on the web page
+            App.loading = true;
+            /*$("form").trigger("reset"); // Reset number in HTML element on the web page
 
             window.location.reload();
             content.show();
-            loader.hide();
+            loader.hide();*/
         });
     }
 }
