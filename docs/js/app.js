@@ -141,7 +141,7 @@ var App = {
         }).then(function(result) {
             $("form").trigger("reset"); // Reset number in HTML element on the web page
 
-            window.location.reload();
+            //window.location.reload();
             content.show();
             loader.hide();
         });
