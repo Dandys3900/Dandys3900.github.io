@@ -6,7 +6,6 @@ var App = {
     tokenPrice: 1000000000000000,
     tokensSold: 0,
     tokensAvailable: 0,
-    userBalance: 0,
 
     init: function() {
         console.log("App is initialized");
@@ -119,19 +118,6 @@ var App = {
         });
     },
 
-    getAccountBalance: function() {
-        App.contracts.DandysTokenSale.deployed().then(function(instance) {
-            dandysTokenSaleInstance = instance;
-            return App.contracts.DandysToken.deployed();
-        }).then(function(instance) {
-            dandysTokenInstance = instance;
-            return dandysTokenInstance.balanceOf(App.account);
-        }).then(function(accountbalance) {
-            App.userBalance = accountbalance.toNumber();
-            console.log("User balance: ", App.userBalance);
-        });
-    },
-
     /************************************************************************/
     /*  buyTokens() function transfers exact amount of the                  */
     /*  tokens(_numberOfTokens) to actual account which is connected to the */
@@ -141,7 +127,6 @@ var App = {
         var loader = $("#loader");
         var content = $("#content");
         var act_balance = App.userBalance;
-        console.log("Actual balance: ", act_balance);
 
         content.hide();
         loader.show();
@@ -156,12 +141,6 @@ var App = {
             });
         }).then(function(result) {
             $("form").trigger("reset"); // Reset number in HTML element on the web page
-
-            while (App.userBalance == act_balance) {
-                App.getAccountBalance();
-                content.hide();
-                loader.show();
-            }
 
             window.location.reload();
             content.show();
