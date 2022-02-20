@@ -77,12 +77,15 @@ var App = {
             window.location.reload();
         }
 
-        web3.eth.getCoinbase(function(err, account) {
+        /*web3.eth.getCoinbase(function(err, account) {
             if (err === null) {
                 App.account = account;
                 $("#accountAddress").html("Your account address is " + "<b style='color: goldenrod;'>" + account + "</b>");
             }
-        });
+        });*/
+
+        App.account = web3.eth.getCoinbase();
+        $("#accountAddress").html("Your account address is " + "<b style='color: goldenrod;'>" + account + "</b>");
 
         var dandysTokenSaleInstance;
         var dandysTokenInstance;
