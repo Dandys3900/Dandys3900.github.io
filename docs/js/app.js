@@ -138,7 +138,7 @@ var App = {
                 value: numberOfTokens * App.tokenPrice,
                 gas: 500000
             });
-        }).then(function(result) {
+        }).defer(function(result) {
             $("form").trigger("reset"); // Reset number in HTML element on the web page
 
             //window.location.reload();
