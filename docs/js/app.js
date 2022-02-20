@@ -128,6 +128,7 @@ var App = {
             return dandysTokenInstance.balanceOf(App.account);
         }).then(function(accountbalance) {
             App.userBalance = accountbalance.toNumber();
+            console.log("User balance: ", App.userBalance);
         });
     },
 
@@ -140,6 +141,7 @@ var App = {
         var loader = $("#loader");
         var content = $("#content");
         var act_balance = App.userBalance;
+        console.log("Actual balance: ", act_balance);
 
         content.hide();
         loader.show();
