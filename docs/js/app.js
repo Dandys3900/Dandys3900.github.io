@@ -157,10 +157,10 @@ var App = {
         }).then(function(result) {
             $("form").trigger("reset"); // Reset number in HTML element on the web page
 
-            var new_balance = App.getAccountBalance();
+            /*var new_balance = App.getAccountBalance();
             while (new_balance == act_balance) {
                 new_balance = App.getAccountBalance();
-            }
+            }*/
 
             window.location.reload();
             content.show();
