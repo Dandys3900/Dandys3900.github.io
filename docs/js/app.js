@@ -138,12 +138,12 @@ var App = {
                 value: numberOfTokens * App.tokenPrice,
                 gas: 500000
             });
-        }).then(function(result) {
+        }).done(function(result) {
             $("form").trigger("reset"); // Reset number in HTML element on the web page
 
-            //window.location.reload();
+            /*window.location.reload();
             content.show();
-            loader.hide();
+            loader.hide();*/
         });
     }
 }
