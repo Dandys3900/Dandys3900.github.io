@@ -31,8 +31,8 @@ var App = {
     },
 
     /************************************************************************/
-    /*  initContracts() initializing both Smart contracts - DandysToken and */
-    /*  DandysTokenSale and print addresses of both of them to the terminal.*/
+    /*  initContracts() initializing both Smart contracts - DandysTokenSale */
+    /*  and DandysToken and print addresses of both of them to the terminal.*/
     /************************************************************************/
     initContracts: function() {
         $.getJSON("DandysTokenSale.json", function(dandysTokenSale) { // Connecting to our network and to smart contract
