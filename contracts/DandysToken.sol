@@ -57,7 +57,7 @@ contract DandysToken {
 
     /************************************************************************/
     /*  approve() function for approving spender (_spender) to spend actual */
-    /*  user(msg.sender) tokens(_value) and calls Approval event.           */
+    /*  user(msg.sender) tokens(_value) and calls the Approval event.       */
     /************************************************************************/
     function approve(address _spender, uint256 _value) public returns (bool success) {
         allowance[msg.sender][_spender] = _value;
