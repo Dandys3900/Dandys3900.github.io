@@ -59,7 +59,7 @@ function mineBlock(blockString: string, difficulty: number = 1): { hash: string;
       return { hash, nonce };
     }
     nonce++;
-    // Safety limit — shouldn't hit this with difficulty 2
+    // Safety limit — shouldn't hit this with difficulty 1
     if (nonce > 1_000_000) {
       return { hash, nonce };
     }
@@ -76,7 +76,7 @@ export function buildBlockchain(): Block[] {
   for (let i = 0; i < blockContents.length; i++) {
     const data = blockContents[i];
     const prevHash = i === 0 ? '0'.repeat(64) : chain[i - 1].hash;
-    const timestamp = new Date(2025, 0, 1, 0, 0, i).toISOString(); // Deterministic timestamps
+    const timestamp = new Date().toISOString(); // Create impression blocks are freshly mined
     const merkleRoot = computeMerkleRoot(data as unknown as Record<string, unknown>);
 
     const blockString = JSON.stringify({

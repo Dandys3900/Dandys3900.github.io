@@ -17,7 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Tomáš Daniel — Software Developer | Cybersecurity",
   description:
-    "Personal blockchain-themed portfolio of Tomáš Daniel. Software Developer with 6+ years of C++ experience in telecommunications, now focused on Cybersecurity. Explore the chain.",
+    "Personal blockchain-themed portfolio of Tomáš Daniel. Software Developer with 8+ years of C++ experience in telecommunications, now focused on Cybersecurity. Explore the chain.",
   keywords: [
     "Tomáš Daniel",
     "Software Developer",

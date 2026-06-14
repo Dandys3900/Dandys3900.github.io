@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Hide DEV Toolbar for better UX
+  devIndicators: false,
   // Security headers
   async headers() {
     return [

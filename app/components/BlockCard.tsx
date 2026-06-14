@@ -1,6 +1,7 @@
 'use client';
 
 import type { Block } from '@/app/lib/blockchain';
+import Image from 'next/image';
 import HashAnimation from './HashAnimation';
 
 interface BlockCardProps {
@@ -94,17 +95,91 @@ function EducationContent({ education }: { education: NonNullable<Block['data'][
   return (
     <div className="flex flex-col gap-4">
       {education.map((edu, i) => (
-        <div key={i} className="education-item">
-          <h4 className="text-base font-semibold text-neon-cyan">{edu.institution}</h4>
-          <p className="text-sm text-gray-300 mt-1">
-            {edu.degree} — {edu.field}
-          </p>
-          <p className="text-sm text-gray-500 mt-0.5">{edu.period}</p>
-          {edu.skills.length > 0 && (
+        <div key={i} className="education-item flex flex-col sm:flex-row justify-between items-start gap-4">
+          <div className="flex-1">
+            <h4 className="text-base font-semibold text-neon-cyan">{edu.institution}</h4>
+            <p className="text-sm text-gray-300 mt-1">
+              {edu.degree} — {edu.field}
+            </p>
+            <p className="text-sm text-gray-500 mt-0.5">{edu.period}</p>
+            {edu.skills.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                {edu.skills.map((skill) => (
+                  <span key={skill} className="skill-chip">{skill}</span>
+                ))}
+              </div>
+            )}
+          </div>
+          {edu.logo && (
+            <div className="flex-shrink-0 w-32 h-20 sm:w-48 sm:h-24 relative">
+              <Image
+                src={edu.logo}
+                alt={`${edu.institution} logo`}
+                fill
+                className="object-contain"
+              />
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function CertificationsContent({ certifications }: { certifications: NonNullable<Block['data']['certifications']> }) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {certifications.map((cert, i) => (
+        <div key={i} className="education-item flex flex-col justify-between">
+          <div>
+            <h4 className="text-base font-semibold text-neon-cyan">{cert.name}</h4>
+            <p className="text-sm text-gray-300 mt-1">{cert.issuer}</p>
+            <p className="text-sm text-gray-500 mt-0.5">Issued: {cert.issued}</p>
+            {cert.credentialId && (
+              <p className="text-xs font-mono text-gray-500 mt-2 break-all">ID: {cert.credentialId}</p>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ProjectsContent({ projects }: { projects: NonNullable<Block['data']['projects']> }) {
+  return (
+    <div className="flex flex-col gap-6">
+      {projects.map((project, i) => (
+        <div key={i} className="education-item flex flex-col gap-3">
+          <div>
+            <h4 className="text-lg font-semibold text-neon-cyan">{project.title}</h4>
+            <p className="text-sm text-gray-400 mt-1">{project.institution}</p>
+          </div>
+          
+          <div className="flex flex-col gap-2 text-sm text-gray-300 leading-relaxed">
+            {project.description.split('\n\n').map((paragraph, pIndex) => (
+              <p key={pIndex}>{paragraph}</p>
+            ))}
+          </div>
+
+          {project.skills && project.skills.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-2">
-              {edu.skills.map((skill) => (
-                <span key={skill} className="skill-chip">{skill}</span>
+              {project.skills.map((skill) => (
+                <span key={skill} className="skill-chip text-xs py-0.5 px-2">{skill}</span>
               ))}
+            </div>
+          )}
+          
+          {/* GitHub placeholder - user will populate the URLs later */}
+          {project.githubUrl !== undefined && (
+            <div className="mt-2 pt-3 border-t border-white/5 flex items-center">
+              {project.githubUrl ? (
+                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-neon-green hover:underline flex items-center gap-1">
+                  <span>GitHub Repo</span>
+                  <span className="text-xs">↗</span>
+                </a>
+              ) : (
+                <span className="text-sm text-gray-600 italic">GitHub Repo (Link pending)</span>
+              )}
             </div>
           )}
         </div>
@@ -161,8 +236,9 @@ export default function BlockCard({ block, isVisible, onPrev, onNext, prevLabel,
       case 'education':
         return data.education ? <EducationContent education={data.education} /> : null;
       case 'certifications':
+        return data.certifications ? <CertificationsContent certifications={data.certifications} /> : (data.placeholder ? <PlaceholderContent text={data.placeholder} /> : null);
       case 'projects':
-        return data.placeholder ? <PlaceholderContent text={data.placeholder} /> : null;
+        return data.projects ? <ProjectsContent projects={data.projects} /> : (data.placeholder ? <PlaceholderContent text={data.placeholder} /> : null);
       case 'contact':
         return data.intro && data.links ? <ContactContent intro={data.intro} links={data.links} /> : null;
       default:
