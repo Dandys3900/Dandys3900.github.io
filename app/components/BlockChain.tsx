@@ -106,6 +106,8 @@ export default function BlockChain({ chain }: BlockChainProps) {
               <BlockCard
                 block={block}
                 isVisible={visibleBlocks.has(i)}
+                currentIndex={activeIndex}
+                totalBlocks={chain.length}
               />
             </div>
           </div>
