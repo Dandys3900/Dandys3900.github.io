@@ -2,7 +2,7 @@ name: Deploy Next.js site to Pages
 
 on:
   push:
-    branches: ["main"] # Change to master if that's your default branch
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -51,6 +51,11 @@ jobs:
         
       - name: Build with Next.js
         run: pnpm next build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
 
   deploy:
     environment:
